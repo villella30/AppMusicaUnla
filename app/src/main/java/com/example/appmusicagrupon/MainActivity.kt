@@ -3,6 +3,7 @@ package com.example.appmusicagrupon
 import Cancion
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -46,6 +47,14 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("portada", cancion.portada)
             startActivity(intent)
 
+        }
+    saludarUsuario()
+    }
+    private fun saludarUsuario(){
+        val bundle : Bundle? = intent.extras
+        if(bundle!=null) {
+            val usuario = bundle?.getString(resources.getString(R.string.nombre))
+            Toast.makeText(this, "Hola $usuario", Toast.LENGTH_SHORT).show()
         }
     }
 }
