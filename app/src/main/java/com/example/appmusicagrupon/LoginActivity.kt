@@ -43,10 +43,6 @@ class LoginActivity : AppCompatActivity() {
         CrearUsuario.setOnClickListener {
             if (Usuario.text.toString().isEmpty() || Contraseña.text.toString().isEmpty()) {
                 Toast.makeText(this, "Por favor, complete los datos", Toast.LENGTH_SHORT).show()
-
-            }else {
-                iniciarActividadPrincipal(Usuario.text.toString())
-=======
             }else{
                 val intent = Intent(this, TerminosYCondicionesActivity::class.java)
                 startActivity(intent)
@@ -61,10 +57,8 @@ class LoginActivity : AppCompatActivity() {
             } else {
 
                 login(Usuario.text.toString(), Contraseña.text.toString())
-=======
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+
+                iniciarActividadPrincipal(Usuario.text.toString())
 
             }
 
