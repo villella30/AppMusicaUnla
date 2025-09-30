@@ -16,8 +16,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var Usuario: EditText
-    lateinit var Contraseña: EditText
+    lateinit var etUsuario: EditText
+    lateinit var etContraseña: EditText
     lateinit var RecordarUsuario: CheckBox
     lateinit var IniciarSesion: Button
     lateinit var CrearUsuario: Button
@@ -33,8 +33,8 @@ class LoginActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        Usuario = findViewById(R.id.Usuario)
-        Contraseña = findViewById(R.id.Contraseña)
+        etUsuario = findViewById(R.id.Usuario)
+        etContraseña = findViewById(R.id.Contraseña)
         RecordarUsuario = findViewById(R.id.RecordarUsuario)
         toolbar = findViewById(R.id.toolbar)
 
@@ -53,27 +53,43 @@ class LoginActivity : AppCompatActivity() {
         CrearUsuario = findViewById(R.id.CrearUsuario)
 
         CrearUsuario.setOnClickListener {
-            if (Usuario.text.toString().isEmpty() || Contraseña.text.toString().isEmpty()) {
+            if (etUsuario.text.toString().isEmpty() || etContraseña.text.toString().isEmpty()) {
                 Toast.makeText(this, "Por favor, complete los datos", Toast.LENGTH_SHORT).show()
             }else{
-                val intent = Intent(this, TerminosYCondicionesActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
+                val dao = AppDatabase.getDatabase(applicationContext).usuarioDao()
+                val existente = dao.getUsuarioByName(etUsuario.text.toString())
 
+
+                if (existente != null) {
+                    Toast.makeText(this, "El usuario ya existe", Toast.LENGTH_SHORT).show()
+                } else {
+                    val nuevoUsuario = Usuario(etUsuario.text.toString(), etContraseña.text.toString())
+                    dao.insert(nuevoUsuario)
+                    Toast.makeText(this, "Usuario creado correctamente", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, TerminosYCondicionesActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+
+            }
         }
 
         IniciarSesion.setOnClickListener {
-            if (Usuario.text.toString().isEmpty() || Contraseña.text.toString().isEmpty()) {
+            val nombre = etUsuario.text.toString()
+            val clave = etContraseña.text.toString()
+
+            if (nombre.isEmpty() || clave.isEmpty()) {
                 Toast.makeText(this, "Por favor, complete los datos", Toast.LENGTH_SHORT).show()
             } else {
+                val dao = AppDatabase.getDatabase(applicationContext).usuarioDao()
+                val usuario = dao.login(nombre, clave)
 
-                login(Usuario.text.toString(), Contraseña.text.toString())
-
-
-
+                if (usuario != null) {
+                    login(etUsuario.text.toString(), etContraseña.text.toString())
+                } else {
+                    Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                }
             }
-
         }
     }
 
@@ -83,7 +99,7 @@ class LoginActivity : AppCompatActivity() {
             preferencias.edit().putString(resources.getString(R.string.nombre), usuario).apply()
             preferencias.edit().putString(resources.getString(R.string.password), password).apply()
         }
-        iniciarActividadPrincipal(Usuario.text.toString())
+        iniciarActividadPrincipal(etUsuario.text.toString())
     }
     private fun iniciarActividadPrincipal(usuario: String?) {
         val intent = Intent(this, MainActivity::class.java)
