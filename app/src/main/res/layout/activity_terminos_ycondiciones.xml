@@ -8,6 +8,10 @@ tools:context=".TerminosYCondicionesActivity"
 android:orientation="vertical"
 android:gravity = "center">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/primary_toolbar"/>
+
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
