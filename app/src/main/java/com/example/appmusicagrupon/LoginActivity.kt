@@ -1,13 +1,17 @@
 package com.example.appmusicagrupon
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -17,6 +21,9 @@ class LoginActivity : AppCompatActivity() {
     lateinit var RecordarUsuario: CheckBox
     lateinit var IniciarSesion: Button
     lateinit var CrearUsuario: Button
+
+    lateinit var toolbar: Toolbar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -29,7 +36,12 @@ class LoginActivity : AppCompatActivity() {
         Usuario = findViewById(R.id.Usuario)
         Contraseña = findViewById(R.id.Contraseña)
         RecordarUsuario = findViewById(R.id.RecordarUsuario)
+        toolbar = findViewById(R.id.toolbar)
 
+        setSupportActionBar(toolbar)
+        supportActionBar!!.title = resources.getString(R.string.titulo)
+        toolbar.setTitleTextColor(Color.WHITE)
+        toolbar.overflowIcon?.setTint(Color.WHITE)
         var preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
         var usuarioGuardado = preferencias.getString(resources.getString(R.string.nombre), "")
         var passwordGuardada = preferencias.getString(resources.getString(R.string.password), "")
@@ -58,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
 
                 login(Usuario.text.toString(), Contraseña.text.toString())
 
-                iniciarActividadPrincipal(Usuario.text.toString())
+
 
             }
 
@@ -79,4 +91,18 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_terminos_y_condiciones, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.terminos_y_condiciones){
+            val intent = Intent(this, TerminosYCondicionesActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }
+

@@ -2,10 +2,14 @@ package com.example.appmusicagrupon
 
 import Cancion
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +25,13 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        lateinit var toolbar: Toolbar
+
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar!!.title = resources.getString(R.string.titulo)
+        toolbar.setTitleTextColor(Color.WHITE)
         val lista = listOf(
             Cancion(1, "Already Dead", "Juice WRLD", "https://i.scdn.co/image/ab67616d0000b2730cdfd4e1d092e29c6d28e3ba", "Fighting Demons"),
             Cancion(2, "Blinding Lights", "The Weeknd", "https://i.scdn.co/image/ab67616d0000b273a3eff72f62782fb589a492f9", "After Hours"),
@@ -57,4 +68,31 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Hola $usuario", Toast.LENGTH_SHORT).show()
         }
     }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_cerrar_sesion, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.cerrar_sesion) {
+
+            val preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
+            val editor = preferencias.edit()
+            editor.clear()
+            editor.apply()
+
+
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }
+
+
+
+
+
+
