@@ -1,6 +1,7 @@
 package com.example.appmusicagrupon
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -9,10 +10,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.adapter.CancionAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 
 class DetalleActivity : AppCompatActivity() {
+    private var mediaPlayer: MediaPlayer? = null
+    private lateinit var previewUrl: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -22,6 +25,7 @@ class DetalleActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         val titulo = intent.getStringExtra("titulo")
         val artista = intent.getStringExtra("artista")
         val album = intent.getStringExtra("album")
@@ -44,8 +48,47 @@ class DetalleActivity : AppCompatActivity() {
             finish()
         }
 
+        previewUrl = intent.getStringExtra("preview") ?: ""
+
+        val btnPlay = findViewById<FloatingActionButton>(R.id.btnPlayPreview)
+        val btnStop = findViewById<FloatingActionButton>(R.id.btnStopPreview)
+
+        btnPlay.setOnClickListener {
+            reproducirPreview(previewUrl)
+        }
+        btnStop.setOnClickListener {
+            detenerPreview()
+        }
+
 
     }
+    private fun reproducirPreview(url: String) {
+        if (url.isEmpty()) return
+
+        mediaPlayer?.release()
+
+        mediaPlayer = MediaPlayer().apply {
+            setDataSource(url)
+            prepareAsync()
+            setOnPreparedListener { mp ->
+                mp.start()
+            }
+            setOnCompletionListener { mp ->
+                mp.release()
+            }
+        }
+    }
+    private fun detenerPreview() {
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
 
 
 }
