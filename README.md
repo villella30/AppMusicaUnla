@@ -16,4 +16,9 @@
 - Valentino Villella - GitHub: villella30 - Implementación de la base de datos
 - Santiago Torrens - GitHub: santitorrens1 - Implementación Logica de Login y Registro de Usuario
 
+## Entrega 3
+
+- Valentino Villella - GitHub: villella30-LLamado a la API en hilo de ejecucion distinto
+- Santiago Torrens - GitHub: santitorrens1 - Implementacion de fragmentos en los terminos y condiciones
+- Santiago Torrens - GitHub: santitorrens1 - Implementacion de notificacion al recordar usuario
 
