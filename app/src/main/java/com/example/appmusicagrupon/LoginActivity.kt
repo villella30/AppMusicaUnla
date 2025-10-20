@@ -15,7 +15,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), FragmentoTerminos {
     lateinit var etUsuario: EditText
     lateinit var etContraseña: EditText
     lateinit var RecordarUsuario: CheckBox
@@ -55,10 +55,9 @@ class LoginActivity : AppCompatActivity() {
         CrearUsuario.setOnClickListener {
             if (etUsuario.text.toString().isEmpty() || etContraseña.text.toString().isEmpty()) {
                 Toast.makeText(this, "Por favor, complete los datos", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 val dao = AppDatabase.getDatabase(applicationContext).usuarioDao()
                 val existente = dao.getUsuarioByName(etUsuario.text.toString())
-
 
                 if (existente != null) {
                     Toast.makeText(this, "El usuario ya existe", Toast.LENGTH_SHORT).show()
@@ -66,11 +65,12 @@ class LoginActivity : AppCompatActivity() {
                     val nuevoUsuario = Usuario(etUsuario.text.toString(), etContraseña.text.toString())
                     dao.insert(nuevoUsuario)
                     Toast.makeText(this, "Usuario creado correctamente", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, TerminosYCondicionesActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
 
+
+                    val dialogo = FragmentoTerminosDialogo()
+                    dialogo.listener = this
+                    dialogo.show(supportFragmentManager, "dialogo_terminos")
+                }
             }
         }
 
@@ -118,6 +118,10 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+    override fun onTerminosAceptados() {
+        Toast.makeText(this, "Términos aceptados. Ya puedes iniciar sesión.", Toast.LENGTH_LONG).show()
+
     }
 
 }
