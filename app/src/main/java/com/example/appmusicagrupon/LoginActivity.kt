@@ -141,12 +141,7 @@ class LoginActivity : AppCompatActivity(), FragmentoTerminos {
         Toast.makeText(this, "Términos aceptados. Ya puedes iniciar sesión.", Toast.LENGTH_LONG).show()
 
     }
-
-    override fun onTerminosAceptados() {
-        Toast.makeText(this, "Términos aceptados. Ya puedes iniciar sesión.", Toast.LENGTH_LONG)
-            .show()
-
-    }
+    
 
     private fun crearCanalDeNotificacion() {
 
