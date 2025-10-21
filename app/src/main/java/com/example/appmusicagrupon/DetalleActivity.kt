@@ -43,8 +43,7 @@ class DetalleActivity : AppCompatActivity() {
         Picasso.get().load(portada).into(imgPortada)
 
         btnVolver.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+
             finish()
         }
 
